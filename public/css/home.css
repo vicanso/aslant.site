@@ -1,0 +1,24 @@
+html, body {
+  height: 100%;
+}
+.applicationContainer {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  margin-top: -100px;
+  left: 15px;
+  right: 15px;
+  width: 100%;
+}
+.applicationContainer .application {
+  border-radius: 5px;
+  background-color: #21232d;
+  display: block;
+  color: #fff;
+  flex: 1;
+  margin: 15px;
+  text-align: center;
+  line-height: 80px;
+  text-decoration: none;
+  font-size: 32px;
+}
