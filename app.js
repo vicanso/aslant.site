@@ -16,12 +16,10 @@ router.get('/varnish-generator', middlewares.template.parse('varnish-generator')
 router.post('/varnish-generator', controllers['varnish-generator'].generate);
 
 const staticOptions = config.staticOptions;
-const denyQuerystring = config.env !== 'development';
 // static file
 app.use(mount(
   staticOptions.urlPrefix,
   staticServe(staticOptions.path, {
-    denyQuerystring,
     maxAge: staticOptions.maxAge,
     headers: staticOptions.headers,
   })));
