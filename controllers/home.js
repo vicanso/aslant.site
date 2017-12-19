@@ -4,11 +4,11 @@ module.exports = (ctx) => {
   const viewData = {
     applications: [
       {
-        name: 'Aslant',
-        url: '/aslant/',
+        name: 'tiny web',
+        url: '/tiny-web/',
       },
       {
-        name: 'Varnish-Generator',
+        name: 'varnish generator',
         url: '/varnish-generator/',
       },
       {

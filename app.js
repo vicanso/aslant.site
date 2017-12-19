@@ -7,13 +7,20 @@ const staticServe = require('koa-static-serve');
 const config = require('./config');
 const controllers = requireTree('./controllers');
 const middlewares = requireTree('./middlewares');
+const tplParse = middlewares.template.parse;
 const app = new Koa();
 router = new Router();
 
+
 router.get('/ping', (ctx) => ctx.body = 'pong');
-router.get('/', middlewares.template.parse('home'), controllers.home);
-router.get('/varnish-generator', middlewares.template.parse('varnish-generator'), controllers['varnish-generator'].view);
-router.post('/varnish-generator', controllers['varnish-generator'].generate);
+router.get('/', tplParse('home'), controllers.home);
+
+const varnishCtrl = controllers['varnish-generator'];
+router.get('/varnish-generator', tplParse('varnish-generator'), varnishCtrl.view);
+router.post('/varnish-generator', varnishCtrl.generate);
+
+const tinyCtrl = controllers['tiny-web'];
+router.get('/tiny-web', tplParse('tiny-web'), tinyCtrl.view);
 
 const staticOptions = config.staticOptions;
 // static file

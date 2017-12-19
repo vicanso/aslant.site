@@ -1,0 +1,27 @@
+.fork {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+.tinyContainer {
+  margin: 15px;
+}
+.tinyContainer .inputWrapper {
+  text-align: center;
+  line-height: 30px;
+}
+.tinyContainer .inputWrapper input {
+  padding: 3px 10px; 
+  width: 300px;
+  outline: 0;
+}
+.tinyContainer .inputWrapper a {
+  background-color: #2db7f5;
+  border: 1px solid #2db7f5;
+  margin-left: 10px;
+  padding: 3px 20px;
+  text-decoration: none;
+  color: #fff;
+}
