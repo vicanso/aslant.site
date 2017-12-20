@@ -12,13 +12,13 @@ block bodyContainer
         table
           thead: tr
             th 文件名
-            th(style='width:200px') 原网站数据
+            th(style='width:200px') 网站数据
             th(style='width:200px') gzip压缩
             th(style='width:200px') brotli压缩
-            th(style='width:200px') 原数据
+            th(style='width:200px') 解压后数据
           tbody
         ul
-          li 原网站数据是指从响应的HTTP头中获取Content-Length的长度，如果没有，则认为原数据字节长度
+          li 原网站数据是指从响应的获取的数据（如果使用压缩的则是压缩后的数据大小）
           li gzip是使用 `level:6` 的压缩后数据大小
           li brotli是使用 `quality:9` 的压缩后数据大小
           li 部分网站虽然使用gzip压缩，但是压缩比不高，因此也会比示例中的gzip数据量大(对于静态文件，可以使用更高的压缩比，并将压缩后的文件缓存)
