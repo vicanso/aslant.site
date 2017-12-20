@@ -6,4 +6,10 @@ docker build -t vicanso/aslant.site .
 
 ## docker run
 
-docker run -d --restart=always -p 5100:5018 -e NODE_ENV=production vicanso/aslant.site
+```bash
+docker run -d --restart=always \
+  -p 5021:5018 \
+  -e NODE_ENV=production \
+  --add-host aslant.site:172.18.16.118 \
+  vicanso/aslant.site
+```
