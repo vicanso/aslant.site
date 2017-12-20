@@ -18,7 +18,11 @@ html, body {
   flex: 1;
   margin: 15px;
   text-align: center;
-  line-height: 80px;
   text-decoration: none;
+  line-height: 20px;
+  font-size: 18px;
+}
+.applicationContainer .application h3 {
+  line-height: 40px;
   font-size: 32px;
 }

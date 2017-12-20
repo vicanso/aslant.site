@@ -4,5 +4,6 @@ block bodyContainer
     each application in viewData.applications
       a.application(href=application.url)
         h3 #{application.name}
+        p #{application.desc || ""}
         
   - importer.import('/css/home.css')

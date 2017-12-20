@@ -7,6 +7,7 @@
 }
 .tinyContainer {
   margin: 15px;
+  padding-bottom: 40px;
 }
 .tinyContainer .inputWrapper {
   text-align: center;
@@ -24,4 +25,33 @@
   padding: 3px 20px;
   text-decoration: none;
   color: #fff;
+}
+.analyzeWrapper table {
+  margin-top: 50px;
+  width: 100%;
+  table-layout: fixed;
+}
+.analyzeWrapper table tr {
+  border: 1px solid #e9eaec;
+}
+.analyzeWrapper table th, .analyzeWrapper table td {
+  text-align: left;
+  padding: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.analyzeWrapper table thead {
+  background-color: #f8f8f9;
+}
+.analyzeWrapper table tbody  {
+  background-color: #fff;
+}
+.analyzeWrapper table tbody tr:hover {
+  background-color: #ebf7ff;
+}
+.analyzeWrapper ul {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+  margin: 15px 0;
 }

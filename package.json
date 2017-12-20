@@ -15,9 +15,10 @@
     "dev": "nodemon app"
   },
   "dependencies": {
-    "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "cheerio": "^1.0.0-rc.2",
+    "google-protobuf": "^3.5.0",
+    "grpc": "^1.8.0",
     "js-yaml": "^3.10.0",
     "jtfileimporter": "^1.0.0",
     "koa": "^2.4.1",
@@ -28,6 +29,7 @@
     "lodash": "^4.17.4",
     "pug": "^2.0.0-rc.4",
     "require-tree": "^1.1.1",
+    "superagent": "^3.8.2",
     "url-join": "^1.1.0",
     "varnish-generator": "^1.5.4"
   }

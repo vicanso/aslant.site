@@ -22,3 +22,5 @@ exports.staticOptions = {
   },
   host: process.env.STATIC_HOST || '',
 };
+
+exports.grpc = 'aslant.site:3016';

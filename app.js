@@ -21,6 +21,7 @@ router.post('/varnish-generator', varnishCtrl.generate);
 
 const tinyCtrl = controllers['tiny-web'];
 router.get('/tiny-web', tplParse('tiny-web'), tinyCtrl.view);
+router.get('/tiny-web/analyze', tinyCtrl.analyze);
 
 const staticOptions = config.staticOptions;
 // static file
