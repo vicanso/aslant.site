@@ -13,15 +13,19 @@ block bodyContainer
           thead: tr
             th 文件名
             th(style='width:200px') 网站数据
-            th(style='width:200px') gzip压缩
-            th(style='width:200px') brotli压缩
-            th(style='width:200px') 解压后数据
+            th(style='width:200px') gzip6|png|jpeg
+            th(style='width:200px') brotli9|webp
+            th(style='width:200px') 原始字节长度 
           tbody
         ul
           li 原网站数据是指从响应的获取的数据（如果使用压缩的则是压缩后的数据大小）
           li gzip是使用 `level:6` 的压缩后数据大小
+          li jpeg是指使用 `jepg:75` 压缩的图片数据大小
+          li png的没有做处理，就是原图片大小
           li brotli是使用 `quality:9` 的压缩后数据大小
+          li webp对于PNG使用无损转换，对于jpeg使用 `quality:75`转换
           li 部分网站虽然使用gzip压缩，但是压缩比不高，因此也会比示例中的gzip数据量大(对于静态文件，可以使用更高的压缩比，并将压缩后的文件缓存)
+          li 部分图片解码失败则没有数据显示
       .tips
   - importer.import('/css/tiny-web.css')
   - importer.import('/js/tiny-web.js')

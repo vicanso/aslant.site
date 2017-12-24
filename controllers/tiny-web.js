@@ -9,6 +9,7 @@ const grpc = require('grpc');
 const zlib = require('zlib');
 const fs = require('fs');
 const Stream = require('stream');
+const phantom = require('phantom');
 
 const config = require('../config');
 
@@ -48,6 +49,27 @@ async function gzip(buf) {
   return res.data;
 }
 
+async function webp(buf, imageType) {
+  const quality = imageType === 'png' ? 0 : 75;
+  const request = new compress.CompressRequest();
+  request.setType(compress.Type.WEBP);
+  request.setData(new Uint8Array(buf));
+  request.setQuality(quality);
+  request.setImageType(imageType);
+  const res = await doRequest(request);
+  return res.data; 
+}
+
+async function jpeg(buf, imageType) {
+  const request = new compress.CompressRequest();
+  request.setType(compress.Type.JPEG);
+  request.setData(new Uint8Array(buf));
+  request.setQuality(75);
+  request.setImageType(imageType);
+  const res = await doRequest(request);
+  return res.data;  
+}
+
 // 为了计算接收数据的字节数，因为不直接将数据转换
 function bufParser(res, fn) {
   const buf = [];
@@ -72,7 +94,7 @@ function unzip(data) {
   });
 }
 
-async function get(url) {
+async function get(url, type) {
   const req = request.get(url)
     .parse(bufParser)
     .buffer(true);
@@ -86,56 +108,37 @@ async function get(url) {
   if (shouldUnzip(res)) {
     buf = await unzip(buf);
   }
-  const brData = await br(buf);
-  const gzipData = await gzip(buf);
-  return {
+  const result = {
     url,
-    br: brData.length,
-    gzip: gzipData.length,
     original: originalLength,
-    bytes: buf.length,
+    bytes: buf.length, 
   };
-}
-
-
-async function analyze(pageUrl) {
-  const baseUrlInfo = url.parse(pageUrl);
-  const res = await request.get(pageUrl);
-  const $ = cheerio.load(res.text);
-  const assets = [];
-  const assetExts = [
-    '.js',
-    '.css',
+  const imgList = [
+    'png',
+    'jpeg',
+    'jpg',
   ];
-  const join = (src) => {
-    if (src.indexOf('http') === 0) {
-      return src;
+  if (_.includes(imgList, type)) {
+    let imageType = 'jpeg';
+    if(type === 'png') {
+      imageType = 'png';
+      result.png = result.original;
+    } else {
+      const jpegData = await jpegData(buf, imageType);
+      result.jpeg = jpegData.length;
     }
-    if (src.indexOf('//') === 0) {
-      return baseUrlInfo.protocol + src;
+    try {
+      const webpData = await webp(buf, imageType);
+      result.webp = webpData.length;
+    } catch (err) {
+
     }
-    return urlJoin(pageUrl, src);
-  };
-  const getExtname = (src) => {
-    const info = url.parse(src);
-    return path.extname(info.pathname);
-  };
-  // 将脚本与css的链接过滤出来
-  _.forEach($('script, link'), (item) => {
-    const dom = $(item);
-    const src = dom.attr('src') || dom.attr('href');
-    if (src) {
-      const ext = getExtname(src);
-      // 过滤其它的后续资源
-      if (!_.includes(assetExts, ext)) {
-        return;
-      }
-      assets.push(join(src));
-    }
-  });
-  const result = await Promise.map(assets, get, {
-    concurrency: 2,
-  });
+  } else {
+    const brData = await br(buf);
+    const gzipData = await gzip(buf);
+    result.br = brData.length;
+    result.gzip = gzipData.length;
+  }
   return result;
 }
 
@@ -149,16 +152,55 @@ exports.view = async (ctx) => {
   });
 };
 
+exports.compress = async (ctx) => {
+  ctx.set('Cache-Control', 'public, max-age=300');
+  const query = ctx.query;
+  ctx.body = await get(query.url, query.type);
+}
+
 exports.analyze = async (ctx) => {
   const currentUrl = ctx.query.url || '';
   if (!currentUrl) {
     ctx.body = null;
     return;
   }
-  const result = await analyze(currentUrl);
-  _.forEach(result, (item) => {
-    const urlInfo = url.parse(item.url);
-    item.file = path.basename(urlInfo.pathname);
+  const instance = await phantom.create(); 
+  const page = await instance.createPage();
+  const images = [];
+  const texts = [];
+  page.on('onResourceReceived', (res) => {
+    const resUrl = res.url;
+    if (resUrl.indexOf('http') !== 0) {
+      return;
+    }
+    const isText = /javascript|css/.test(res.contentType);
+    const isImage = /image/.test(res.contentType);
+    if (isText) {
+      if (!_.includes(texts, resUrl)) {
+        texts.push(resUrl);
+      }
+    } else if (isImage) {
+      if (!_.includes(images, resUrl)) {
+        images.push(resUrl);
+      }
+    }
   });
-  ctx.body = result;
+  await page.open(currentUrl);
+  await instance.exit();
+  const urls = [];
+  const convert = (urls, type) => _.map(urls, (item) => {
+    const urlInfo = url.parse(item);
+    const file = path.basename(urlInfo.pathname);
+    return {
+      type: path.extname(file).substring(1),
+      file,
+      url: item,
+    };
+  });
+  urls.push(...convert(texts, 'text'));
+  urls.push(...convert(images, 'image'));
+  ctx.set('Cache-Control', 'public, max-age=300');
+  ctx.body = {
+    list: urls,
+  };
 };

@@ -1,6 +1,73 @@
 ;(function($) {
   var analyzeWrapper = $('.analyzeWrapper');
   var analyzing = false;
+
+
+  function sum() {
+    var trList = analyzeWrapper.find('.analyzeResult table tbody tr');
+    var counts = [];
+    trList.each(function () {
+      $(this).find('td').each(function(index) {
+        if (index === 0) {
+          return;
+        }
+        var item = $(this);
+        var text = item.text();
+        if (!text) {
+          return;
+        }
+        var v = parseInt(text.replace(/,/, ''));
+        // console.dir(v);
+        if (!counts[index - 1]) {
+          counts[index - 1] = 0;
+        }
+        counts[index - 1] += v;
+      });
+    });
+    var max = counts[counts.length - 1];
+    var getDesc = function (index) {
+      var v = counts[index];
+      var perecnt = (v * 100 / max).toFixed(2);
+      return v.toLocaleString() + '(' + perecnt + '%)';
+    };
+    var html = '<tr>' +
+      '<td>汇总</td>' +
+      '<td>' + getDesc(0) + '</td>' +
+      '<td>' + getDesc(1) + '</td>' +
+      '<td>' + getDesc(2) + '</td>' +
+      '<td>' + max.toLocaleString() + '</td>' +
+    '</tr>';
+    analyzeWrapper.find('.analyzeResult table tbody').append(html);
+  }
+
+  function doCompressAnalyze(items, trList) {
+    if (!items.length) {
+      sum();
+      return;
+    }
+    var item = items.shift();
+    var tr = trList.shift();
+    var url = encodeURIComponent(item.url);
+    $.ajax({
+      url: '/tiny-web/compress?url=' + url + '&type=' + item.type,
+    }).then(function(res) {
+      var tds = tr.find('td');
+      tds.eq(1).text(res.original.toLocaleString());
+      tds.eq(4).text(res.bytes.toLocaleString());
+      if (res.br) {
+        tds.eq(2).text(res.gzip.toLocaleString());
+        tds.eq(3).text(res.br.toLocaleString());
+      } else if (res.webp) {
+        var v = res.png || res.jpeg;
+        tds.eq(2).text(v.toLocaleString());
+        tds.eq(3).text(res.webp.toLocaleString());
+      }
+      doCompressAnalyze(items, trList);
+    }).catch(function(err) {
+      doCompressAnalyze(items, trList);
+    });
+  }
+
   $('.tinyContainer .inputWrapper a').click(function() {
     var url = $('.tinyContainer .inputWrapper input').val();
     if (!url || analyzing) {
@@ -17,41 +84,22 @@
       analyzing = false;
       tips.hide();
       var arr = [];
-      var counts = {
-        original: 0,
-        gzip: 0,
-        br: 0,
-        bytes: 0,
-      };
-      $.each(res, function(index, item) {
-        counts.original += item.original;
-        counts.gzip += item.gzip;
-        counts.br += item.br;
-        counts.bytes += item.bytes;
-
+      $.each(res.list, function(index, item) {
         var html = '<tr>' +
-          '<td title="'  + item.url + '">' + item.file + '</td>' +
-          '<td>' + item.original.toLocaleString() + '</td>' +
-          '<td>' + item.gzip.toLocaleString() + '</td>' +
-          '<td>' + item.br.toLocaleString() + '</td>' +
-          '<td>' + item.bytes.toLocaleString() + '</td>' +
+        '<td title="'  + item.url + '">' + item.file + '</td>' +
+        '<td></td>' +
+        '<td></td>' +
+        '<td></td>' +
+        '<td></td>' +
         '</tr>';
         arr.push(html);
       });
-      var getCountDesc = function (key) {
-        var value = counts[key];
-        var percent = (100 * value / counts.bytes).toFixed(2)
-        return value.toLocaleString() + '(' + percent + '%)';
-      };
-      arr.push('<tr>' +
-        '<td>汇总</td>' +
-        '<td>' + getCountDesc('original') + '</td>' +
-        '<td>' + getCountDesc('gzip') + '</td>' +
-        '<td>' + getCountDesc('br') + '</td>' +
-        '<td>' + counts.bytes.toLocaleString() + '</td>' +
-      '</tr>')
       analyzeResult.removeClass('hidden');
-      analyzeResult.find('tbody').html(arr.join(''));
+      var trList = [];
+      analyzeResult.find('tbody').html(arr.join('')).find('tr').each(function() {
+        trList.push($(this));
+      });
+      doCompressAnalyze(res.list, trList);
     }).catch(function(res) {
       analyzing = false;
       tips.html('<p class="tac">很抱歉，服务出错，分析失败</p>');
