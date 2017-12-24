@@ -1,4 +1,3 @@
-const cheerio = require('cheerio');
 const _ = require('lodash');
 const urlJoin = require('url-join');
 const path = require('path');
@@ -124,7 +123,7 @@ async function get(url, type) {
       imageType = 'png';
       result.png = result.original;
     } else {
-      const jpegData = await jpegData(buf, imageType);
+      const jpegData = await jpeg(buf, imageType);
       result.jpeg = jpegData.length;
     }
     try {
