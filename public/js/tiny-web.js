@@ -1,7 +1,8 @@
 ;(function($) {
   var analyzeWrapper = $('.analyzeWrapper');
   var analyzing = false;
-
+  var radios = $('.tinyContainer .inputWrapper input:radio');
+  radios.eq(1).prop('checked', true);
 
   function sum() {
     var trList = analyzeWrapper.find('.analyzeResult table tbody tr');
@@ -16,7 +17,7 @@
         if (!text) {
           return;
         }
-        var v = parseInt(text.replace(/,/, ''));
+        var v = parseInt(text.replace(/,/g, ''));
         // console.dir(v);
         if (!counts[index - 1]) {
           counts[index - 1] = 0;
@@ -73,6 +74,9 @@
     if (!url || analyzing) {
       return;
     }
+
+    var assetType = radios.filter(':checked').val();
+
     var tips = analyzeWrapper.find('.tips').show();
     var analyzeResult = analyzeWrapper.find('.analyzeResult');
     analyzeResult.addClass('hidden');
@@ -82,9 +86,28 @@
       url: '/tiny-web/analyze?url=' + encodeURIComponent(url),
     }).then(function(res) {
       analyzing = false;
+      var list = [];
+      var typeList = null;
+      if (assetType === '1') {
+        typeList = ['js', 'css'];
+      } else if (assetType === '2') {
+        typeList = ['png', 'jpeg'];
+      } else {
+        typeList = null;
+      }
+
+      $.each(res.list, function(index, item) {
+        if (!typeList) {
+          list.push(item);
+          return;
+        }
+        if (typeList.indexOf(item.type) !== -1) {
+          list.push(item);
+        }
+      });
       tips.hide();
       var arr = [];
-      $.each(res.list, function(index, item) {
+      $.each(list, function(index, item) {
         var html = '<tr>' +
         '<td title="'  + item.url + '">' + item.file + '</td>' +
         '<td></td>' +
@@ -99,7 +122,7 @@
       analyzeResult.find('tbody').html(arr.join('')).find('tr').each(function() {
         trList.push($(this));
       });
-      doCompressAnalyze(res.list, trList);
+      doCompressAnalyze(list, trList);
     }).catch(function(res) {
       analyzing = false;
       tips.html('<p class="tac">很抱歉，服务出错，分析失败</p>');

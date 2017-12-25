@@ -6,6 +6,13 @@ block bodyContainer
     .inputWrapper
       span 请输入需要分析静态文件压缩的网址：
       input(type='text', value=viewData.currentUrl)
+      span
+        input#allAsset(type='radio', name='assetType', value=0)
+        label(for='allAsset') ALL
+        input#cssJsAsset(type='radio', name='assetType', value=1)
+        label(for='cssJsAsset') CSS/JS 
+        input#images(type='radio', name='assetType', value=2)
+        label(for='images') PNG/JPEG 
       a(href='javascript:;') 分析
     .analyzeWrapper
       .analyzeResult.hidden

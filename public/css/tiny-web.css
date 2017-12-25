@@ -13,11 +13,15 @@
   text-align: center;
   line-height: 30px;
 }
-.tinyContainer .inputWrapper input {
+.tinyContainer .inputWrapper input[type='text'] {
   padding: 3px 10px; 
   width: 300px;
   outline: 0;
 }
+.tinyContainer .inputWrapper input[type='radio'] {
+  margin: 0 3px 0 15px;
+}
+
 .tinyContainer .inputWrapper a {
   background-color: #2db7f5;
   border: 1px solid #2db7f5;

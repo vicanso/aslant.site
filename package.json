@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
-    "cheerio": "^1.0.0-rc.2",
     "google-protobuf": "^3.5.0",
     "grpc": "^1.8.0",
     "js-yaml": "^3.10.0",
