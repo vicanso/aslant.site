@@ -1,0 +1,15 @@
+sudo: false
+language: node_js
+node_js:
+  - "10"
+
+services:
+  - docker
+
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t aslant-site .
+  - docker tag aslant-site $DOCKER_USERNAME/aslant-site
+  - docker tag aslant-site $DOCKER_USERNAME/aslant-site
+  - docker push $DOCKER_USERNAME/aslant-site 
+  - docker images

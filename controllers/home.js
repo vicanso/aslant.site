@@ -14,8 +14,9 @@ module.exports = (ctx) => {
         desc: '生成varnish的配置文件',
       },
       {
-        name: 'TODO',
-        url: '#',
+        name: 'tiny',
+        url: 'http://tiny.aslant.site/',
+        desc: '图片、文件的各类压缩功能',
       },
     ],
   };
