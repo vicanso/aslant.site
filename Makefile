@@ -21,4 +21,4 @@ bench:
 	go test -bench=. ./...
 
 build:
-	go build -o aslant-site 
+	go build -tags netgo -o aslant-site 
