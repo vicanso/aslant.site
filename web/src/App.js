@@ -12,6 +12,14 @@ class App extends Component {
         name: "Tiny",
         url: "https://tiny.aslant.site/",
       },
+      {
+        name: "Diving",
+        url: "https://diving.aslant.site/",
+      },
+      {
+        name: "Novel",
+        url: "https://xs.aslant.site/",
+      }
     ].map((item) => {
       return (
         <div
