@@ -15,9 +15,7 @@ test-cover:
 
 build-web:
 	cd web \
-		&& npm run build \
-		&& cd .. \
-		&& packr -z
+		&& npm run build
 
 bench:
 	go test -bench=. ./...
