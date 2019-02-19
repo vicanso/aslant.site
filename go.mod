@@ -1,7 +1,6 @@
 module github.com/vicanso/aslantsite
 
 require (
-	github.com/gobuffalo/packr v1.22.0
 	github.com/gobuffalo/packr/v2 v2.0.1
 	github.com/vicanso/cod v0.0.0-20190218140130-5b1fb8230774
 	github.com/vicanso/hes v0.1.3

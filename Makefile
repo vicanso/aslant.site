@@ -27,4 +27,4 @@ build:
 	go build -tags netgo -o aslant-site 
 
 clean:
-	packr2 clea
+	packr2 clean
