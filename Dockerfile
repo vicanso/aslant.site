@@ -1,8 +1,20 @@
+FROM node:10-alpine as webbuilder
+
+RUN apk update \
+  && apk add git \
+  && git clone --depth=1 https://github.com/vicanso/aslant.site.git /aslant.site \
+  && cd /aslant.site/web \
+  && npm i \
+  && npm run build \
+  && rm -rf node_modules
+
 FROM golang:1.11-alpine as builder
+
+COPY --from=webbuilder /aslant.site /aslant.site
 
 RUN apk update \
   && apk add git make gcc \
-  && git clone --depth=1 https://github.com/vicanso/aslant.site.git /aslant.site \
+  && go get -u github.com/gobuffalo/packr/v2/packr2 \
   && cd /aslant.site \
   && make build
 

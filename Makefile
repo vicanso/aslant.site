@@ -1,3 +1,5 @@
+export GO111MODULE = on
+
 .PHONY: default test test-cover dev
 
 # for dev
@@ -21,4 +23,8 @@ bench:
 	go test -bench=. ./...
 
 build:
+	packr2
 	go build -tags netgo -o aslant-site 
+
+clean:
+	packr2 clea
