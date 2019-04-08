@@ -13,6 +13,10 @@ class App extends Component {
         url: "https://tiny.aslant.site/",
       },
       {
+        name: "New Tiny",
+        url: "https://tinynew.aslant.site/",
+      },
+      {
         name: "Diving",
         url: "https://diving.aslant.site/",
       },
