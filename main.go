@@ -11,17 +11,17 @@ import (
 
 	_ "github.com/vicanso/aslantsite/controller"
 	"github.com/vicanso/aslantsite/router"
-	"github.com/vicanso/cod"
+	"github.com/vicanso/elton"
 
 	humanize "github.com/dustin/go-humanize"
 
-	compress "github.com/vicanso/cod-compress"
-	errorHandler "github.com/vicanso/cod-error-handler"
-	etag "github.com/vicanso/cod-etag"
-	fresh "github.com/vicanso/cod-fresh"
-	recover "github.com/vicanso/cod-recover"
-	responder "github.com/vicanso/cod-responder"
-	stats "github.com/vicanso/cod-stats"
+	compress "github.com/vicanso/elton-compress"
+	errorHandler "github.com/vicanso/elton-error-handler"
+	etag "github.com/vicanso/elton-etag"
+	fresh "github.com/vicanso/elton-fresh"
+	recover "github.com/vicanso/elton-recover"
+	responder "github.com/vicanso/elton-responder"
+	stats "github.com/vicanso/elton-stats"
 )
 
 var (
@@ -69,9 +69,9 @@ func main() {
 
 	logger := log.Default()
 
-	d := cod.New()
+	d := elton.New()
 
-	d.OnError(func(c *cod.Context, err error) {
+	d.OnError(func(c *elton.Context, err error) {
 		logger.DPanic("unexpected error",
 			zap.String("uri", c.Request.RequestURI),
 			zap.Error(err),
@@ -81,7 +81,7 @@ func main() {
 	d.Use(recover.New())
 
 	d.Use(stats.New(stats.Config{
-		OnStats: func(statsInfo *stats.Info, _ *cod.Context) {
+		OnStats: func(statsInfo *stats.Info, _ *elton.Context) {
 			logger.Info("access log",
 				zap.String("ip", statsInfo.IP),
 				zap.String("method", statsInfo.Method),
@@ -95,7 +95,7 @@ func main() {
 
 	d.Use(errorHandler.NewDefault())
 
-	d.Use(func(c *cod.Context) error {
+	d.Use(func(c *elton.Context) error {
 		c.NoCache()
 		return c.Next()
 	})
@@ -107,7 +107,7 @@ func main() {
 	d.Use(responder.NewDefault())
 
 	// health check
-	d.GET("/ping", func(c *cod.Context) (err error) {
+	d.GET("/ping", func(c *elton.Context) (err error) {
 		c.Body = "pong"
 		return
 	})
