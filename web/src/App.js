@@ -15,6 +15,10 @@ class App extends Component {
       {
         name: "Diving",
         url: "https://diving.aslant.site/",
+      },
+      {
+        name: "Free Proxy",
+        url: "https://proxy.aslant.site/",
       }
     ].map((item) => {
       return (
