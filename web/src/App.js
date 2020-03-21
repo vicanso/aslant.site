@@ -46,7 +46,9 @@ class App extends Component {
         </div>
         <footer
           className="site-footer"
-        >© {yearDesc} Tree Xie</footer>
+        >© {yearDesc} Tree Xie
+          <a href="http://www.beian.miit.gov.cn/">粤ICP备17025766号</a>
+        </footer>
       </div>
     );
   }

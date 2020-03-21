@@ -34,3 +34,8 @@
   text-align: center;
   color: #fff;
 }
+
+.site-footer a {
+  margin-left: 10px;
+  color: #fff;
+}
