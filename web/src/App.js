@@ -6,22 +6,22 @@ class App extends Component {
     const items = [
       {
         name: "IP Location",
-        url: "http://ip.npmtrend.com/",
+        url: "https://ip.npmtrend.com/",
         description: "通过IP地址获取对应的定位信息，可精准到市",
       },
       {
         name: "Tiny",
-        url: "http://tiny.npmtrend.com/",
+        url: "https://tiny.npmtrend.com/",
         description: "图片压缩处理，可生成png，jpeg以及webp，可指定缩小尺寸以及质量大小",
       },
       {
         name: "Diving",
-        url: "http://diving.npmtrend.com/",
+        url: "https://diving.npmtrend.com/",
         description: "dive的网页版，可针对docker镜像生成每层的分析数据(增加、删除文件等)，避免重复覆盖的无用数据",
       },
       {
         name: "Free Proxy",
-        url: "http://proxy.npmtrend.com/",
+        url: "https://proxy.npmtrend.com/",
         description: "通过爬取网上的免费代理，并以该代理尝试访问wwww.baidu.com后确认是否可用，定时重新检测",
       }
     ].map((item) => {
