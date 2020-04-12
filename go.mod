@@ -1,19 +1,11 @@
 module github.com/vicanso/aslantsite
 
-go 1.13
+go 1.14
 
 require (
 	github.com/dustin/go-humanize v1.0.0
-	github.com/gobuffalo/packr/v2 v2.7.1
-	github.com/vicanso/elton v0.2.2
-	github.com/vicanso/elton-compress v0.1.6
-	github.com/vicanso/elton-error-handler v0.1.3
-	github.com/vicanso/elton-etag v0.1.1
-	github.com/vicanso/elton-fresh v0.1.1
-	github.com/vicanso/elton-recover v0.1.3
-	github.com/vicanso/elton-responder v0.1.5
-	github.com/vicanso/elton-static-serve v0.1.1
-	github.com/vicanso/elton-stats v0.1.1
+	github.com/gobuffalo/packr/v2 v2.8.0
+	github.com/vicanso/elton v0.5.0
 	github.com/vicanso/hes v0.2.1
-	go.uber.org/zap v1.13.0
+	go.uber.org/zap v1.14.1
 )

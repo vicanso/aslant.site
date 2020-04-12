@@ -6,6 +6,7 @@ tmp/*
 *.out
 *.log
 aslant-site
+*-packr.go
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
