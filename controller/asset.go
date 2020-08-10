@@ -46,6 +46,7 @@ func init() {
 	ctrl := assetCtrl{}
 	g.GET("/", noQuery, ctrl.index)
 	g.GET("/privacy", noQuery, ctrl.privacy)
+	g.GET("/support", noQuery, ctrl.support)
 	g.GET("/favicon.ico", ctrl.favIcon)
 
 	sf := &staticFile{
@@ -86,4 +87,9 @@ func (ctrl assetCtrl) favIcon(c *elton.Context) (err error) {
 func (ctrl assetCtrl) privacy(c *elton.Context) (err error) {
 	c.CacheMaxAge("10m")
 	return sendFile(c, "privacy.html")
+}
+
+func (ctrl assetCtrl) support(c *elton.Context) (err error) {
+	c.CacheMaxAge("10m")
+	return sendFile(c, "support.html")
 }
