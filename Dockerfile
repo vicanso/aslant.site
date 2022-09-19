@@ -8,13 +8,15 @@ RUN apk update \
   && npm run build \
   && rm -rf node_modules
 
-FROM golang:1.14-alpine as builder
+FROM golang:1.18-alpine as builder
 
 COPY --from=webbuilder /aslant.site /aslant.site
 
 RUN apk update \
   && apk add git make gcc \
-  && go get -u github.com/gobuffalo/packr/v2/packr2 \
+  && go env -w GO111MODULE=on \
+  && go env -w GOPROXY=https://goproxy.cn,direct \
+  && go install github.com/gobuffalo/packr/v2/packr2@v2.8.3 \
   && cd /aslant.site \
   && make build
 
